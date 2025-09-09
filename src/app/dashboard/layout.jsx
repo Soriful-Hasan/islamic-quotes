@@ -5,14 +5,11 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Home, PlusCircle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useContext } from "react";
+import { AuthContext } from "@/app/context/AuthContext";
 
-const sidebarItems = [
-  { name: "Dashboard Home", href: "/dashboard", icon: Home },
-  { name: "Add Quote", href: "/dashboard/addQuotes", icon: PlusCircle },
-  { name: "Pending Quote", href: "/dashboard/pendingQuotes", icon: PlusCircle },
-];
-
-export default function layout({ children }) {
+export default function DashboardLayout({ children }) {
+  const { user, logout } = useContext(AuthContext);
   const pathname = usePathname();
 
   return (
@@ -21,28 +18,64 @@ export default function layout({ children }) {
       <aside className="w-64 bg-white border-r dark:bg-gray-900 dark:border-gray-800 p-4">
         <h2 className="text-lg font-bold mb-6">📖 Islamic Quotes</h2>
         <nav className="space-y-2">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon;
-            return (
+          {/* Common for all logged-in users */}
+          {user?.role === "user" && (
+            <>
               <Link
-                key={item.name}
-                href={item.href}
+                href="/dashboard"
                 className={cn(
                   "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800",
-                  pathname === item.href
+                  pathname === "/dashboard"
                     ? "bg-gray-200 dark:bg-gray-700"
                     : "text-gray-600 dark:text-gray-300"
                 )}
               >
-                <Icon className="h-4 w-4" />
-                {item.name}
+                <Home className="h-4 w-4" />
+                Dashboard Home
               </Link>
-            );
-          })}
-          <Button variant="destructive" className="w-full flex gap-2 mt-4">
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
+
+              <Link
+                href="/dashboard/addQuotes"
+                className={cn(
+                  "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800",
+                  pathname === "/dashboard/addQuotes"
+                    ? "bg-gray-200 dark:bg-gray-700"
+                    : "text-gray-600 dark:text-gray-300"
+                )}
+              >
+                <PlusCircle className="h-4 w-4" />
+                Add Quote
+              </Link>
+              <Link
+                href="/dashboard/addedQuotes"
+                className={cn(
+                  "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800",
+                  pathname === "/dashboard/addedQuotes"
+                    ? "bg-gray-200 dark:bg-gray-700"
+                    : "text-gray-600 dark:text-gray-300"
+                )}
+              >
+                <PlusCircle className="h-4 w-4" />
+                Added Quotes
+              </Link>
+            </>
+          )}
+
+          {/* Only admin */}
+          {user?.role === "admin" && (
+            <Link
+              href="/dashboard/pendingQuotes"
+              className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800",
+                pathname === "/dashboard/pendingQuotes"
+                  ? "bg-gray-200 dark:bg-gray-700"
+                  : "text-gray-600 dark:text-gray-300"
+              )}
+            >
+              <PlusCircle className="h-4 w-4" />
+              Pending Quote
+            </Link>
+          )}
         </nav>
       </aside>
 

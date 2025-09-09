@@ -22,7 +22,7 @@ export default function Register() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axiosInstance.post("/register", data);
+      const res = await axios.post("http://localhost:5000/register", data);
       if (res.status === 201) {
         setServerMsg("User registered successfully ✅");
         reset();
