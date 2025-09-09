@@ -16,7 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import useLogout from "@/hooks/useLogout";
 import { AuthContext } from "@/app/context/AuthContext";
 export default function NavBar() {
@@ -25,7 +25,7 @@ export default function NavBar() {
   console.log(user);
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "Dashboard", href: "/quotes" },
+    { label: "Dashboard", href: "/dashboard" },
     { label: "About", href: "/about" },
   ];
   return (
@@ -40,7 +40,7 @@ export default function NavBar() {
             width={30}
             height={30}
             className="border rounded-full"
-            src={user.photo}
+            src={user?.photo}
             alt=""
           />
         </div>
@@ -63,7 +63,10 @@ export default function NavBar() {
           </NavigationMenu>
           {user ? (
             <>
-              <Button onClick={logout}>Logout</Button>
+              <Button variant="destructive" onClick={logout}>
+                <LogOut />
+                Logout
+              </Button>
               <p>{user.name}</p>
               <p>{user.role}</p>
             </>

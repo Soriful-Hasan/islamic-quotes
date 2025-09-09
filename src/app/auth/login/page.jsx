@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import useAxios from "@/hooks/useAxios";
+import { redirect } from "next/navigation";
 export default function Login() {
   const axiosInstance = useAxios();
   const {
@@ -28,7 +29,7 @@ export default function Login() {
         setServerMsg("Logged in successfully ✅");
 
         reset();
-        // if you want: router.push("/dashboard")
+        redirect("/");
       } else {
         setServerMsg("Login failed");
       }

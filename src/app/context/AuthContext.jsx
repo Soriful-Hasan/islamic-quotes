@@ -5,6 +5,7 @@ import React, { createContext, useEffect, useState } from "react";
 export const AuthContext = createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const axiosInstance = useAxios();
 
   useEffect(() => {
@@ -22,12 +23,14 @@ export default function AuthProvider({ children }) {
       } catch (error) {
         setUser(null);
         console.error("Failed to fetch user:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUser();
   }, []);
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
